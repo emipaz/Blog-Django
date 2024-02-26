@@ -206,3 +206,110 @@ Running migrations:
   Applying blog.0001_initial... OK
 
 ```
+### ipython en la shellde django
+
+```powershell
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> pip install ipython
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000288A336DCC0>: Failed to establish a new connection: [Errno 11001] getaddrinfo failed')': /simple/ipython/
+Collecting ipython
+  Downloading ipython-8.22.1-py3-none-any.whl (811 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 812.0/812.0 KB 3.7 MB/s eta 0:00:00
+Collecting pygments>=2.4.0
+  Using cached pygments-2.17.2-py3-none-any.whl (1.2 MB)
+Collecting traitlets>=5.13.0
+  Using cached traitlets-5.14.1-py3-none-any.whl (85 kB)
+Collecting exceptiongroup
+  Using cached exceptiongroup-1.2.0-py3-none-any.whl (16 kB)
+Collecting stack-data
+  Using cached stack_data-0.6.3-py3-none-any.whl (24 kB)
+Collecting jedi>=0.16
+Collecting matplotlib-inline
+  Using cached matplotlib_inline-0.1.6-py3-none-any.whl (9.4 kB)
+Collecting prompt-toolkit<3.1.0,>=3.0.41
+  Using cached prompt_toolkit-3.0.43-py3-none-any.whl (386 kB)
+Collecting decorator
+  Using cached decorator-5.1.1-py3-none-any.whl (9.1 kB)
+Collecting colorama
+  Using cached colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+Collecting parso<0.9.0,>=0.8.3
+  Using cached parso-0.8.3-py2.py3-none-any.whl (100 kB)
+Collecting wcwidth
+  Using cached wcwidth-0.2.13-py2.py3-none-any.whl (34 kB)
+Collecting pure-eval
+  Using cached pure_eval-0.2.2-py3-none-any.whl (11 kB)
+Collecting executing>=1.2.0
+  Using cached executing-2.0.1-py2.py3-none-any.whl (24 kB)
+Collecting asttokens>=2.1.0
+  Using cached asttokens-2.4.1-py2.py3-none-any.whl (27 kB)
+Collecting six>=1.12.0
+  Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Installing collected packages: wcwidth, pure-eval, traitlets, six, pygments, prompt-toolkit, parso, executing, exceptiongroup, decorator, colorama, matplotlib-inline, jedi, asttokens, stack-data, ipython
+Successfully installed asttokens-2.4.1 colorama-0.4.6 decorator-5.1.1 exceptiongroup-1.2.0 executing-2.0.1 ipython-8.22.1 jedi-0.19.1 matplotlib-inline-0.1.6 parso-0.8.3 prompt-toolkit-3.0.43 pure-eval-0.2.2 pygments-2.17.2 six-1.16.0 stack-data-0.6.3 traitlets-5.14.1 wcwidth-0.2.13
+WARNING: You are using pip version 22.0.4; however, version 24.0 is available.
+You should consider upgrading via the 'C:\Users\Usuario\Desktop\Blog-Django\env_blog\Scripts\python.exe -m pip install --upgrade pip' command.
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py shell -i ipython
+Python 3.10.4 (tags/v3.10.4:9d38120, Mar 23 2022, 23:13:41) [MSC v.1929 64 bit (AMD64)]
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.22.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from django.contrib.auth.models import User
+
+In [2]: from blog.models import Post
+
+In [3]: user = User.objectsj.get(username="emi")
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+Cell In[3], line 1
+----> 1 user = User.objectsj.get(username="emi")
+
+AttributeError: type object 'User' has no attribute 'objectsj'
+
+In [4]: user = User.objects.get(username="emi")
+
+In [5]: user
+Out[5]: <User: emi>
+
+In [6]: post = Post(
+   ...: titulo = "Instalacion de ipython para django shell",
+   ...: slug = "django-ipython-shell",
+   ...: cuerpo = """
+   ...: pip install ipython
+   ...: despues una vez instalado ipython
+   ...: ejecutar :
+   ...: python manage.py shell -i ipython
+   ...: """,
+   ...: autor=user)
+
+In [7]: post.save()
+
+In [8]: post
+Out[8]: <Post: Instalacion de ipython para django shell>
+
+In [9]: Post.objects.create(titulo = "Un nuevo post",
+   ...: slug = "post-nuevo",
+   ...: cuerpo="post creado usando Post.objects.create",
+   ...: autor=user)
+Out[9]: <Post: Un nuevo post>
+
+In [10]: post.titulo = "Un Nuevo Post"
+
+In [11]: post.save()
+
+In [12]: posteos = Post.objects.all()
+
+In [13]: posteos
+Out[13]: <QuerySet [<Post: Un nuevo post>, <Post: Un Nuevo Post>]>
+
+In [14]: post.titulo=("ipython en shell de django")
+
+In [15]: post.save()
+
+In [16]: posteos = Post.objects.all()
+
+In [17]: posteos
+Out[17]: <QuerySet [<Post: Un nuevo post>, <Post: ipython en shell de django>]>
+
+In [18]: post.cuerpo
+Out[18]: '\npip install ipython\ndespues una vez instalado ipython\nejecutar :\npython manage.py shell -i ipython\n'
+
+```
