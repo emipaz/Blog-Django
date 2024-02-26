@@ -1,0 +1,6 @@
+.env
+env_blog/
+get-pip.py
+*.pdf
+*.pyc
+*.sqlite3
