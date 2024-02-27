@@ -206,7 +206,7 @@ Running migrations:
   Applying blog.0001_initial... OK
 
 ```
-### ipython en la shellde django
+### ipython en la shell de django
 
 ```powershell
 (env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> pip install ipython
@@ -312,4 +312,57 @@ Out[17]: <QuerySet [<Post: Un nuevo post>, <Post: ipython en shell de django>]>
 In [18]: post.cuerpo
 Out[18]: '\npip install ipython\ndespues una vez instalado ipython\nejecutar :\npython manage.py shell -i ipython\n'
 
+```
+
+## Filtrando , ordenando y eliminando post desde el shell
+
+```powershell
+
+In [2]: from blog.models import Post
+
+In [3]: Post.objects.filter(publicado__year = 2024)
+Out[3]: <QuerySet [<Post: Un nuevo post>, <Post: ipython en shell de django>]>
+
+In [4]: Post.objects.filter(publicado__year = 2024, autor__username="emi")
+Out[4]: <QuerySet [<Post: Un nuevo post>, <Post: ipython en shell de django>]>
+
+In [5]: # usando exclude()
+
+In [6]:
+
+In [6]: Post.objects.filter(publicado__year = 2024, autor__username="emi") \
+   ...: .exclude(titulo__startswith="Un")
+Out[6]: <QuerySet [<Post: ipython en shell de django>]>
+
+In [7]: # usando orden:by \
+   ...: Post.objects.order_by("titulo")
+Out[7]: <QuerySet [<Post: Un nuevo post>, <Post: ipython en shell de django>]>
+
+In [8]: # usando orden:by \
+   ...: Post.objects.order_by("-titulo")
+Out[8]: <QuerySet [<Post: ipython en shell de django>, <Post: Un nuevo post>]>
+
+In [9]: # Borrando \
+   ...: post = Post.objects.get(id=2)
+
+In [10]: post
+Out[10]: <Post: Un nuevo post>
+
+In [11]: post.delete()
+Out[11]: (1, {'blog.Post': 1})
+
+In [12]: Post.objects.all()
+Out[12]: <QuerySet [<Post: ipython en shell de django>]>
+```
+
+## Probando el Manager Personalizado
+
+```powershell
+In [1]: from blog.models import Post
+
+In [2]: Post.publicados.all()
+Out[2]: <QuerySet [<Post: Creando un Manager Personalizado>, <Post: ipython en shell de django>]>
+
+In [3]: Post.publicados.filter(titulo__startswith="ipython")
+Out[3]: <QuerySet [<Post: ipython en shell de django>]>
 ```

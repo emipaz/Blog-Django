@@ -4,6 +4,12 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class PublucadoManager(models.Manager):
+    
+    def get_queryset(self) -> models.QuerySet:
+        return super().get_queryset().filter( estado = Post.Status.PUBLICADO )
+
+
 class Post(models.Model):
     
     class Meta:
@@ -28,6 +34,9 @@ class Post(models.Model):
                                     on_delete = models.CASCADE,
                                     related_name = 'blog_posts')
 
+    # Managers
+    objects    = models.Manager()   # The default manager.
+    publicados = PublucadoManager() # Manager por Publicados
     
     def __str__(self):
         return self.titulo
