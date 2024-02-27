@@ -24,10 +24,13 @@ def lista_post(request):
 ### ALternativa al Try Except 
 from django.shortcuts import render, get_object_or_404
 
-def detalle_post(request, id):
+def detalle_post(request, año, mes, dia, post):
     post = get_object_or_404(Post, 
-                             id = id,
-                             estado = Post.Status.PUBLICADO)
+                             estado = Post.Status.PUBLICADO,
+                             slug=post,
+                             publicado__year  = año,
+                             publicado__month = mes,
+                             publicado__day   = dia)
 
     return render(request, 
                   template_name ="blog/post/detalle_post.html", 

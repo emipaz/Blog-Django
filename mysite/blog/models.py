@@ -23,7 +23,7 @@ class Post(models.Model):
         PUBLICADO = 'P', 'Publicado'
     
     titulo      = models.CharField(max_length = 250)
-    slug        = models.SlugField(max_length = 250)
+    slug        = models.SlugField(max_length = 250, unique_for_date = 'publicado')
     cuerpo      = models.TextField()
     publicado   = models.DateTimeField(default = timezone.now )
     creado      = models.DateTimeField(auto_now_add = True)
@@ -43,6 +43,10 @@ class Post(models.Model):
         return self.titulo
     
     def get_url_absoluta(self):
-        return reverse("blog:detalle_post", args=[self.id])
+        return reverse("blog:detalle_post", 
+                       args=[self.publicado.year, 
+                             self.publicado.month, 
+                             self.publicado.day, 
+                             self.slug])
     
     

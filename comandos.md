@@ -366,3 +366,30 @@ Out[2]: <QuerySet [<Post: Creando un Manager Personalizado>, <Post: ipython en s
 In [3]: Post.publicados.filter(titulo__startswith="ipython")
 Out[3]: <QuerySet [<Post: ipython en shell de django>]>
 ```
+
+## Migrando modificaciones en el slug
+
+```powershell
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py makemigrations
+Migrations for 'blog':
+  blog\migrations\0002_alter_post_slug.py
+    - Alter field slug on post
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py sqlmigrate blog 0002
+BEGIN;
+--
+-- Alter field slug on post
+--
+CREATE TABLE "new__blog_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "slug" varchar(250) NOT NULL, "titulo" varchar(250) NOT NULL, "cuerpo" text NOT NULL, "publicado" datetime NOT NULL, "creado" datetime NOT NULL, "actualizado" datetime NOT NULL, "estado" varchar(1) NOT NULL, "autor_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED);
+INSERT INTO "new__blog_post" ("id", "titulo", "cuerpo", "publicado", "creado", "actualizado", "estado", "autor_id", "slug") SELECT "id", "titulo", "cuerpo", "publicado", "creado", "actualizado", "estado", "autor_id", "slug" FROM "blog_post";
+DROP TABLE "blog_post";
+ALTER TABLE "new__blog_post" RENAME TO "blog_post";
+CREATE INDEX "blog_post_slug_b95473f2" ON "blog_post" ("slug");
+CREATE INDEX "blog_post_autor_id_8811ea21" ON "blog_post" ("autor_id");
+CREATE INDEX "blog_post_publica_176893_idx" ON "blog_post" ("publicado" DESC);
+COMMIT;
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, blog, contenttypes, sessions
+Running migrations:
+  Applying blog.0002_alter_post_slug... OK
+```	
