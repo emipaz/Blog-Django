@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
 from django.contrib.auth.models import User
 
 # Create your models here.
 
-class PublucadoManager(models.Manager):
+class PublicadoManager(models.Manager):
     
     def get_queryset(self) -> models.QuerySet:
         return super().get_queryset().filter( estado = Post.Status.PUBLICADO )
@@ -36,9 +37,12 @@ class Post(models.Model):
 
     # Managers
     objects    = models.Manager()   # The default manager.
-    publicados = PublucadoManager() # Manager por Publicados
+    publicados = PublicadoManager() # Manager por Publicados
     
     def __str__(self):
         return self.titulo
+    
+    def get_url_absoluta(self):
+        return reverse("blog:detalle_post", args=[self.id])
     
     

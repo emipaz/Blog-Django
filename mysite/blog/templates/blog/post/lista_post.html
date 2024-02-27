@@ -6,7 +6,7 @@
   <h1>Mi Blog</h1>
   {% for post in posts %}
     <h2>
-      <a href="{% url 'blog:detalle_post' post.id %}">
+      <a href="{{ post.get_url_absoluta }}">
         {{ post.titulo }}
       </a>
     </h2>
