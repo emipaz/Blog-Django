@@ -393,3 +393,23 @@ Operations to perform:
 Running migrations:
   Applying blog.0002_alter_post_slug... OK
 ```	
+
+
+## Mandar mails desde django
+
+```powershell
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py shell -i ipython
+Python 3.10.4 (tags/v3.10.4:9d38120, Mar 23 2022, 23:13:41) [MSC v.1929 64 bit (AMD64)]
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.22.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from django.core.mail import send_mail
+
+In [2]: send_mail("enviando mail desde django",
+   ...: "este es un mail desde shell de django",
+   ...: "emipaz1975@gmail.com",
+   ...: ["burpass@gmail.com"],
+   ...: fail_silently=False)
+Out[2]: 1
+
+```
