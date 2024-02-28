@@ -413,3 +413,30 @@ In [2]: send_mail("enviando mail desde django",
 Out[2]: 1
 
 ```
+
+## Agregamos la Tabla de Comentarios y la migramos
+
+```powershell
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py makemigrations blog
+Migrations for 'blog':
+  blog\migrations\0003_comentarios_and_more.py
+    - Create model Comentarios
+    - Create index blog_coment_creado_ed7e09_idx on field(s) creado of model comentarios
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py sqlmigrate blog 0003
+BEGIN;
+--
+-- Create model Comentarios
+--
+CREATE TABLE "blog_comentarios" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "nombre" varchar(80) NOT NULL, "email" varchar(254) NOT NULL, "cuerpo" text NOT NULL, "creado" datetime NOT NULL, "actualizado" datetime NOT NULL, "activo" bool NOT NULL, "post_id" bigint NOT NULL REFERENCES "blog_post" ("id") DEFERRABLE INITIALLY DEFERRED);
+--
+-- Create index blog_coment_creado_ed7e09_idx on field(s) creado of model comentarios
+--
+CREATE INDEX "blog_coment_creado_ed7e09_idx" ON "blog_comentarios" ("creado");
+CREATE INDEX "blog_comentarios_post_id_f73310cd" ON "blog_comentarios" ("post_id");
+COMMIT;
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, blog, contenttypes, sessions
+Running migrations:
+  Applying blog.0003_comentarios_and_more... OK
+```	

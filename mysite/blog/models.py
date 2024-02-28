@@ -49,4 +49,25 @@ class Post(models.Model):
                              self.publicado.day, 
                              self.slug])
     
+class Comentarios(models.Model):
+    
+    class Meta:
+        ordering = ('creado',)
+        indexes = [
+            models.Index(fields=['creado']),
+        ]
+        
+    post        = models.ForeignKey(Post,
+                                    on_delete    = models.CASCADE,
+                                    related_name = 'comentarios')
+    nombre      = models.CharField(max_length = 80)
+    email       = models.EmailField()
+    cuerpo      = models.TextField()
+    creado      = models.DateTimeField(auto_now_add = True)
+    actualizado = models.DateTimeField(auto_now = True)
+    activo      = models.BooleanField(default = True)
+    
+    def __str__(self):
+        return f"Comentario de {self.nombre} en {self.post}"
+    
     
