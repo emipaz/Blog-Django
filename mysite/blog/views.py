@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import Http404 
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from .models import Post
+from .forms import EmailPostForm
+from django.core.mail import send_mail
 # Create your views here.
 
 def lista_post(request):
@@ -47,3 +49,33 @@ def detalle_post(request, año, mes, dia, post):
     return render(request, 
                   template_name ="blog/post/detalle_post.html", 
                   context = {"post": post})
+    
+def compartir_post(request, post_id):
+    
+    post = get_object_or_404(Post, id = post_id,
+                             estado = Post.Status.PUBLICADO)
+    enviado = False
+    
+    if request.method == 'POST':
+        
+        formulario = EmailPostForm(request.POST)
+        
+        if formulario.is_valid():
+
+            cd           = formulario.cleaned_data
+            post_url     = request.build_absolute_uri(post.get_url_absoluta())
+            asunto       = f"{cd['nombre']} recomienda que leas {post.titulo}"
+            mensaje      = f"Lea este artículo {post_url}\n\n" \
+                           f"{cd['nombre']} a comentado:\n\n\t {cd['comentario']}"
+            send_mail(asunto,mensaje,"emipaz1975@gmail.com",[cd['para']], fail_silently=False)
+            enviado = True             
+    else:
+        
+        formulario = EmailPostForm()
+    
+    return render(request, 
+                  template_name ="blog/post/compartir_post.html", 
+                  context = {"post": post, 
+                             "form": formulario,
+                             "enviado": enviado}
+                  )
