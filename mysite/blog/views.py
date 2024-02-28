@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.http import Http404 
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
-from .models import Post
-from .forms import EmailPostForm
+from .models import Post , Comentarios
+from .forms import EmailPostForm , ComentariosForm
 from django.core.mail import send_mail
+from django.views.decorators.http import require_POST
+
 # Create your views here.
 
 def lista_post(request):
@@ -45,10 +47,16 @@ def detalle_post(request, año, mes, dia, post):
                              publicado__year  = año,
                              publicado__month = mes,
                              publicado__day   = dia)
+    
+    comentarios = post.comentarios.filter(activo=True)
+    formulario  = ComentariosForm()
 
     return render(request, 
                   template_name ="blog/post/detalle_post.html", 
-                  context = {"post": post})
+                  context = {"post": post,
+                             "comentarios": comentarios,
+                             "formulario": formulario
+                             })
     
 def compartir_post(request, post_id):
     
@@ -78,4 +86,22 @@ def compartir_post(request, post_id):
                   context = {"post": post, 
                              "form": formulario,
                              "enviado": enviado}
+                  )
+
+@require_POST
+def comentar_post(request, post_id):
+    post         = get_object_or_404(Post, id = post_id, estado = Post.Status.PUBLICADO)
+    comentario   = None
+    formulario   = ComentariosForm(data = request.POST)
+    
+    if formulario.is_valid():
+        comentario      = formulario.save(commit = False)
+        comentario.post = post
+        comentario.save()
+    
+    return render(request,
+                  template_name ="blog/post/comentar.html",
+                  context = {"post": post,
+                             "comentario": comentario,
+                             "formulario": formulario}
                   )

@@ -1,0 +1,14 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Agregar Comentario{% endblock %}
+
+{% block content %}
+    {% if comment %}
+        <h2>Su Comentario fue agregado</h2>
+        <p>
+            <a href="{{ post.get_url_absoluta }}">Volver al Post</a>
+        </p>
+    {% else %}
+        {% include "blog/post/includes/formulario_comentar.html" %}
+    {% endif %}
+{% endblock %}

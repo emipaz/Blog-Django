@@ -14,4 +14,7 @@ urlpatterns = [
     path("<int:post_id>/compartir/", 
             views.compartir_post, 
             name="compartir_post"),
+    path("<int:post_id>/comentar/", 
+            views.comentar_post, 
+            name="comentar_post"),
 ]

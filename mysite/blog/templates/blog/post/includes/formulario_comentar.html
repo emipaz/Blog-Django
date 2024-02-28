@@ -1,0 +1,8 @@
+<h2>Agregar un Comentario</h2>
+
+    <form action="{% url 'blog:comentar_post' post.id %}" method="post">
+        {{ formulario.as_p }}
+        {% csrf_token %}
+        <p>
+            <input type="submit" value="Comentar"></p>
+    </form>

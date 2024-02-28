@@ -13,4 +13,21 @@
       Compartir post por mail
     </a>
   </p>
+    {% with comentarios.count as total_comentarios %}
+      <h2>
+        {{ total_comentarios }} comentario{{ total_comments|pluralize }}
+      </h2>
+    {% endwith %}
+    {% for comentario in comentarios %}
+      <div class="comment">
+        <p class="info">
+          Comentario  {{ forloop.counter }} de {{ comentario.nombre }}
+          {{ comentario.creado }}
+        </p>
+        {{ comentario.cuerpo }}
+      </div>
+    {% empty %}
+      <p>Aún no hay comentarios para este post.</p>
+    {% endfor %}
+    {% include "blog/post/includes/formulario_comentar.html" %}
 {% endblock %}
