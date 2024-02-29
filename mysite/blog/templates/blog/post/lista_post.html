@@ -10,6 +10,7 @@
         {{ post.titulo }}
       </a>
     </h2>
+    <p class="tags">Tags: {{ post.tags.all|join:", " }}</p>
     <p class="date">
       Publicado {{ post.publicado }} por {{ post.autor }}
     </p>
