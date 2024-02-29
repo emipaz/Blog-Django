@@ -440,3 +440,105 @@ Operations to perform:
 Running migrations:
   Applying blog.0003_comentarios_and_more... OK
 ```	
+
+## Capitulo 3 Agragamos Taggit
+
+```powershell
+
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> pip install django-taggit==3.0.0
+Requirement already satisfied: django-taggit==3.0.0 in c:\users\usuario\desktop\blog-django\env_Requirement already satisfied: Django>=3.2 in c:\users\usuario\desktop\blog-django\env_blog\lib\site-packages (from django-taggit==3.0.0) (4.2)
+lib\site-packages (from Django>=3.2->django-taggit==3.0.0) (0.4.4)
+Requirement already satisfied: asgiref<4,>=3.6.0 in c:\users\usuario\desktop\blog-django\env_blog\lib\site-packages (from Django>=3.2->django-taggit==3.0.0) (3.7.2)
+Requirement already satisfied: tzdata in c:\users\usuario\desktop\blog-django\env_blog\lib\site-packages (from Django>=3.2->django-taggit==3.0.0) (2024.1)
+Requirement already satisfied: typing-extensions>=4 in c:\users\usuario\desktop\blog-django\env_blog\lib\site-packages (from asgiref<4,>=3.6.0->Django>=3.2->django-taggit==3.0.0) (4.10.0)
+WARNING: You are using pip version 22.0.4; however, version 24.0 is available.
+You should consider upgrading via the 'C:\Users\Usuario\Desktop\Blog-Django\env_blog\Scripts\python.exe -m pip install --upgrade pip' command.
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> pip install --upgrade pip
+Requirement already satisfied: pip in c:\users\usuario\desktop\blog-django\env_blog\lib\site-packages (22.0.4)
+Collecting pip
+  Downloading pip-24.0-py3-none-any.whl (2.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 4.0 MB/s eta 0:00:00
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 22.0.4
+    Uninstalling pip-22.0.4:
+      Successfully uninstalled pip-22.0.4
+ERROR: Could not install packages due to an OSError: [WinError 5] Acceso denegado: 'C:\\Users\\Usuario\\AppData\\Local\\Temp\\pip-uninstall-cobjom8w\\pip.exe'
+Check the permissions.
+
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python -m pip install --upgrade pip
+Requirement already satisfied: pip in c:\users\usuario\desktop\blog-django\env_blog\lib\site-pac(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> pip list
+Package           Version
+----------------- -------
+asgiref           3.7.2
+asttokens         2.4.1
+colorama          0.4.6
+decorator         5.1.1
+Django            4.2
+django-taggit     3.0.0
+exceptiongroup    1.2.0
+executing         2.0.1
+ipython           8.22.1
+jedi              0.19.1
+matplotlib-inline 0.1.6
+parso             0.8.3
+pip               24.0
+prompt-toolkit    3.0.43
+pure-eval         0.2.2
+Pygments          2.17.2
+python-dotenv     1.0.1
+setuptools        58.1.0
+six               1.16.0
+sqlparse          0.4.4
+stack-data        0.6.3
+traitlets         5.14.1
+typing_extensions 4.10.0
+tzdata            2024.1
+wcwidth           0.2.13
+
+```
+
+## Migracion de Tags
+
+```powershell
+
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py makemigrations blog
+Migrations for 'blog':
+  blog\migrations\0004_post_tags.py
+    - Add field tags to post
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py sqlmigrate blog 0004
+BEGIN;
+--
+-- Add field tags to post
+--
+-- (no-op)
+COMMIT;
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, blog, contenttypes, sessions, taggit
+Running migrations:
+  Applying taggit.0001_initial... OK
+  Applying taggit.0002_auto_20150616_2121... OK
+  Applying taggit.0003_taggeditem_add_unique_index... OK
+  Applying taggit.0004_alter_taggeditem_content_type_alter_taggeditem_tag... OK
+  Applying taggit.0005_auto_20220424_2025... OK
+  Applying blog.0004_post_tags... OK
+
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py shell -i ipython
+Python 3.10.4 (tags/v3.10.4:9d38120, Mar 23 2022, 23:13:41) [MSC v.1929 64 bit (AMD64)]
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.22.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from blog.models import Post
+
+In [2]: post = Post.objects.get(id=1)
+
+In [3]: post
+Out[3]: <Post: ipython en shell de django>
+
+In [4]: post.tags.add("python", "Django", "powershell")
+
+In [5]: post.tags.all()
+Out[5]: <QuerySet [<Tag: powershell>, <Tag: python>, <Tag: Django>]>
+
+```
