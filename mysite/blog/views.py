@@ -5,11 +5,19 @@ from .models import Post , Comentarios
 from .forms import EmailPostForm , ComentariosForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
+from taggit.models import Tag
 
 # Create your views here.
 
-def lista_post(request):
+def lista_post(request, tag_slug=None):
     lista_de_posts = Post.publicados.all()
+    # tags
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug = tag_slug)
+        lista_de_posts = lista_de_posts.filter(tags__in = [tag])
+         
+    
     # paginacion
     paginator     = Paginator(lista_de_posts, 3)
     pagina_numero = request.GET.get('page', 1)
@@ -22,7 +30,9 @@ def lista_post(request):
         posts = paginator.get_page(paginator.num_pages)
     
     
-    return render (request, "blog/post/lista_post.html", {"posts": posts})
+    return render (request, "blog/post/lista_post.html", 
+                   {"posts": posts,
+                    "tag"  : tag})
 
 
 # def detalle_post(request, id):

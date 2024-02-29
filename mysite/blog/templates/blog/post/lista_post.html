@@ -4,14 +4,24 @@
 
 {% block content %}
   <h1>Mi Blog</h1>
+  {% if tag %}
+      <h2>Etiqueta : "{{ tag.name }}"</h2>
+  {% endif %}
+  
   {% for post in posts %}
     <h2>
-      <a href="{{ post.get_url_absoluta }}">
-        {{ post.titulo }}
-      </a>
+      <a href="{{ post.get_url_absoluta }}">{{ post.titulo }}</a>
     </h2>
-    <p class="tags">Tags: {{ post.tags.all|join:", " }}</p>
-    <p class="date">
+    <p class="tags">
+      Etiquetas : 
+      {% for tag in post.tags.all %}
+        <a href= "{% url 'blog:lista_post_x_tag'  tag.slug %}"> {{ tag.name }}</a>
+        {% if not fooloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+       
+    
+  <p class="date">
       Publicado {{ post.publicado }} por {{ post.autor }}
     </p>
     {{ post.cuerpo|truncatewords:30|linebreaks }}
