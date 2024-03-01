@@ -542,3 +542,29 @@ In [5]: post.tags.all()
 Out[5]: <QuerySet [<Tag: powershell>, <Tag: python>, <Tag: Django>]>
 
 ```
+
+## Retrieving posts by similarit
+## Retornar post por similaridad
+
+Now that we have implemented tagging for blog posts, you can do many interesting things with tags.
+Tags allow you to categorize posts in a non-hierarchical manner. Posts about similar topics will have
+several tags in common. We will build a functionality to display similar posts by the number of tags they
+share. In this way, when a user reads a post, we can suggest to them that they read other related posts.
+In order to retrieve similar posts for a specific post, you need to perform the following steps:
+
+ahora que hemos implementado etiquetas para los posteos del blog, puedes hacer muchas cosas interesantes con las etiquetas. Las etiquetas te permiten categorizar los posteos de manera no jerarquica los posteos sobre temas similares tendran varias etiquetas en comun. Vamos a construir una funcionalidad para mostrar posteos similares por el numero de etiquetas que comparten. De esta manera, cuando un usuario lea un posteo, podemos sugerirle que lea otros posteos relacionados. Para recuperar posteos similares para un posteo especifico, necesitas realizar los siguientes pasos:
+
+1. Retrieve all tags for the current post
+2. Get all posts that are tagged with any of those tags
+3. Exclude the current post from that list to avoid recommending the same post
+4. Order the results by the number of tags shared with the current post
+5. In the case of two or more posts with the same number of tags, recommend the most recent post
+6. Limit the query to the number of posts you want to recommend
+
+1. Obtenga todas las etiquetas para el posteo actual
+2. Obtenga todos los posteos que estan etiquetados con cualquiera de esas etiquetas
+3. Excluya el posteo actual de esa lista para evitar recomendar el mismo post
+4. Ordenar los resultados por el numero de etiquetas compartidas con el posteo actual
+5. En el caso de dos o mas posteos con el mismo numero de etiquetas, recomienda el posteo mas reciente
+6. Limitar la consulta al numero de posteos que deseas recomendar
+

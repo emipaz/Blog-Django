@@ -6,6 +6,7 @@ from .forms import EmailPostForm , ComentariosForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
+from django.db.models import Count
 
 # Create your views here.
 
@@ -61,12 +62,19 @@ def detalle_post(request, año, mes, dia, post):
     comentarios = post.comentarios.filter(activo=True)
     formulario  = ComentariosForm()
 
+    post_tags_ids  = post.tags.values_list('id', flat = True)
+    post_similares = Post.publicados.filter(tags__in = post_tags_ids)\
+                                    .exclude(id = post.id)
+    post_similares = post_similares.annotate(tags_iguales = Count('tags'))\
+                                   .order_by('-tags_iguales','-publicado')[:4] 
+    
     return render(request, 
                   template_name ="blog/post/detalle_post.html", 
                   context = {"post": post,
-                             "comentarios": comentarios,
-                             "formulario": formulario
-                             })
+                             "comentarios"    : comentarios,
+                             "formulario"     : formulario,
+                             "post_similares" : post_similares}
+                  )
     
 def compartir_post(request, post_id):
     
