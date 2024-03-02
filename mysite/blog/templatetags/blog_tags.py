@@ -2,6 +2,8 @@ from django import template
 from ..models import Post
 from  datetime import datetime
 from django.db.models import Count
+from markdown import markdown
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -24,3 +26,7 @@ def mas_comentados(count=5):
     return Post.publicados.annotate(
         total_comentarios = Count('comentarios')
     ).order_by('-total_comentarios')[:count]
+    
+@register.filter(name='markdown')
+def formato_markdown(text):
+    return mark_safe(markdown(text))
