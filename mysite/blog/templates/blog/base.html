@@ -17,7 +17,16 @@
                 Hay escritos {% total_de_posts %} post hasta el {% hora %}
                 </p>
                 <h3>Ultimos Post</h3>
-                {% mostrar_ultimos_posts 3 %}        
+                {% mostrar_ultimos_posts 3 %}     
+            <h3>Post mas comentados </h3>
+                {% mas_comentados 3 as post_mas_comentados %}
+                <ul>
+                    {% for post in post_mas_comentados %}
+                        <li>
+                            <a href="{{ post.get_url_absoluta }}">{{ post.titulo }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
         </div>
     </body>
     
