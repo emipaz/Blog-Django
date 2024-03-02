@@ -567,3 +567,131 @@ Installing collected packages: markdown
 Successfully installed markdown-3.5.2
 ```	
 
+## Agregamos el mapa del sitio
+
+El mapa del sitio de django depende de django.contrib.sites, que le permite asociar objetos a sitos en particular websites que son ejecutados en su projecto. Esto se puede usar para tener un sitio web unico con un solo proyecto de django. Para instalar el framework de sitemap, necesitamos activar ambos los sitemaps y los sitios en tu proyecto.}
+
+
+```powershell
+
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py makemigrations
+No changes detected
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, blog, contenttypes, sessions, sites, taggit
+Running migrations:
+  Applying sites.0001_initial... OK
+  Applying sites.0002_alter_domain_unique... OK
+```
+## Creacion de la Base de datos postgres
+
+```postgresql
+
+postgres=# CREATE USER blog WITH PASSWORD "3645";
+ERROR:  error de sintaxis en o cerca de «"3645"»
+LÍNEA 1: CREATE USER blog WITH PASSWORD "3645";
+                                        ^
+postgres=# CREATE USER blog WITH PASSWORD 3645;
+ERROR:  error de sintaxis en o cerca de «3645»
+LÍNEA 1: CREATE USER blog WITH PASSWORD 3645;
+                                        ^
+postgres=# CREATE USER blog WITH PASSWORD '3645';
+CREATE ROLE
+postgres=# CREATE DATABASE blog OWNER blog ENCODING 'UTF8';
+CREATE DATABASE
+postgres=#
+```	
+
+```powershell
+
+env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python manage.py dumpdata --indent=2 --output=mysite_data.json
+[...........................................................................]
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python manage.py makemigrations
+No changes detected
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python manage.py sqlmigrate blog
+usage: manage.py sqlmigrate [-h] [--database DATABASE] [--backwards] [--version] [-v {0,1,2,3}] [--settings SETTINGS] [--pythonpath PYTHONPATH]
+                            [--traceback] [--no-color] [--force-color] [--skip-checks]
+                            app_label migration_name
+manage.py sqlmigrate: error: the following arguments are required: migration_name
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, blog, contenttypes, sessions, sites, taggit
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying taggit.0001_initial... OK
+  Applying taggit.0002_auto_20150616_2121... OK
+  Applying taggit.0003_taggeditem_add_unique_index... OK
+  Applying taggit.0004_alter_taggeditem_content_type_alter_taggeditem_tag... OK
+  Applying taggit.0005_auto_20220424_2025... OK
+  Applying blog.0001_initial... OK
+  Applying blog.0002_alter_post_slug... OK
+  Applying blog.0003_comentarios_and_more... OK
+  Applying blog.0004_post_tags... OK
+  Applying sessions.0001_initial... OK
+  Applying sites.0001_initial... OK
+  Applying sites.0002_alter_domain_unique... OK
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite>
+
+
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python manage.py loaddata mysite_data.json
+Traceback (most recent call last):
+  File "C:\Users\Usuario\Desktop\Blog-Django\mysite\manage.py", line 22, in <module>
+    main()
+  File "C:\Users\Usuario\Desktop\Blog-Django\mysite\manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "C:\Users\Usuario\Desktop\Blog-Django\env_blog\lib\site-packages\django\core\management\__init__.py", line 442, in execute_from_command_line
+    utility.execute()
+  File "C:\Users\Usuario\Desktop\Blog-Django\env_blog\lib\site-packages\django\core\management\__init__.py", line 436, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "C:\Users\Usuario\Desktop\Blog-Django\env_blog\lib\site-packages\django\core\management\base.py", line 412, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "C:\Users\Usuario\Desktop\Blog-Django\env_blog\lib\site-packages\django\core\management\base.py", line 458, in execute
+    output = self.handle(*args, **options)
+  File "C:\Users\Usuario\Desktop\Blog-Django\env_blog\lib\site-packages\django\core\management\commands\loaddata.py", line 102, in handle
+    self.loaddata(fixture_labels)
+  File "C:\Users\Usuario\Desktop\Blog-Django\env_blog\lib\site-packages\django\core\management\commands\loaddata.py", line 163, in loaddata
+    self.load_label(fixture_label)
+  File "C:\Users\Usuario\Desktop\Blog-Django\env_blog\lib\site-packages\django\core\management\commands\loaddata.py", line 251, in load_label
+    for obj in objects:
+  File "C:\Users\Usuario\Desktop\Blog-Django\env_blog\lib\site-packages\django\core\serializers\json.py", line 67, in Deserializer
+    stream_or_string = stream_or_string.decode()
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xed in position 15672: invalid continuation byte
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python -Xutf8 manage.py dumpdata --indent=2 --output=mysite_data_utf8.json
+[...........................................................................]
+
+```
+Existio un error de codificacion en los datos volvimos de vuelta a sqlite3 y volvimos a descargar  los datos.
+
+
+```powershell
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python -Xutf8 manage.py dumpdata --indent=2 --output=mysite_data_utf8.json
+[...........................................................................]
+
+```
+Volvemos a la configuracion con postgres
+
+```powershell
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python manage.py loaddata mysite_data_utf8.json
+
+
+Installed 80 object(s) from 1 fixture(s)
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite>
+```
+
+
