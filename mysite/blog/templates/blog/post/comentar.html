@@ -6,7 +6,7 @@
     {% if comment %}
         <h2>Su Comentario fue agregado</h2>
         <p>
-            <a href="{{ post.get_url_absoluta }}">Volver al Post</a>
+            <a href="{{ post.get_absolute_url }}">Volver al Post</a>
         </p>
     {% else %}
         {% include "blog/post/includes/formulario_comentar.html" %}

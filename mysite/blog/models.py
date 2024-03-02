@@ -44,7 +44,7 @@ class Post(models.Model):
     def __str__(self):
         return self.titulo
     
-    def get_url_absoluta(self):
+    def get_absolute_url(self):
         return reverse("blog:detalle_post", 
                        args=[self.publicado.year, 
                              self.publicado.month, 

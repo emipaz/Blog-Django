@@ -17,7 +17,7 @@
   <h2>Post Similares</h2>
     {% for post in post_similares %}
       <p>
-        <a href="{{ post.get_url_absoluta }}">{{ post.titulo }}</a>
+        <a href="{{ post.get_absolute_url }}">{{ post.titulo }}</a>
       </p>
     {% empty %}
       No Tiene post Similares.
