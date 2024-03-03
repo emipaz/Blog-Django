@@ -136,17 +136,14 @@ def buscar_post(request):
         
         if formulario.is_valid():
             consulta = formulario.cleaned_data['consulta']
-            
-            
-            busca_vector   = SearchVector('titulo',weight='A' , config = 'spanish') + \
-                             SearchVector("cuerpo",weight='B' , config = 'spanish')
-            busca_consulta = SearchQuery(consulta,              config = 'spanish') 
+            #busca_vector   = SearchVector('titulo',weight='A' , config = 'spanish') + \
+            #                 SearchVector("cuerpo",weight='B' , config = 'spanish')
+            #busca_consulta = SearchQuery(consulta,              config = 'spanish') 
             
             resultados = Post.publicados.annotate(
-                             busqueda = busca_vector,
-                             rank     = SearchRank(busca_vector, busca_consulta)
-                    ).filter(rank__gte=0.3
-                    ).order_by("-rank")
+                        similitud = TrigramSimilarity('titulo',consulta),
+                    ).filter(similitud__gt = 0.1
+                    ).order_by("-similitud")
             
     return render(request, 
                   template_name ="blog/post/buscar.html",

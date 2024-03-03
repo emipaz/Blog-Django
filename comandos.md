@@ -729,3 +729,24 @@ Out[8]: <QuerySet [<Post: ipython en shell de django>]>
 
 ```	
 
+## Agregar Extencion par trigram de postgres
+
+```postgres
+
+Server [localhost]: 127.0.0.1
+Database [postgres]: blog
+Port [5432]: 5432
+Username [postgres]: blog
+Contraseña para usuario blog:
+psql (16.2)
+ADVERTENCIA: El código de página de la consola (850) difiere del código
+            de página de Windows (1252).
+            Los caracteres de 8 bits pueden funcionar incorrectamente.
+            Vea la página de referencia de psql «Notes for Windows users»
+            para obtener más detalles.
+Digite «help» para obtener ayuda.
+
+blog=> CREATE EXTENSION pg_trgm;
+CREATE EXTENSION
+blog=>
+```
