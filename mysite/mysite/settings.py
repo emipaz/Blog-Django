@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "taggit",
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
@@ -139,6 +140,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = "emipaz1975@gmail.com"
-EMAIL_HOST_PASSWORD = "XXXXXXXXXXXXXXXX"
+EMAIL_HOST_PASSWORD = "lkos sisz cdci tzds"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

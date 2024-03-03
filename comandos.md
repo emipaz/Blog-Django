@@ -694,4 +694,38 @@ Installed 80 object(s) from 1 fixture(s)
 (env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite>
 ```
 
+## agregando el complemento de busqueda de django para postgres
+
+```powershell	
+
+(env_blog) PS C:\Users\Usuario\Desktop\Blog-Django\mysite> python .\manage.py shell -i ipython
+Python 3.10.4 (tags/v3.10.4:9d38120, Mar 23 2022, 23:13:41) [MSC v.1929 64 bit (AMD64)]
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.22.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from blog.models import Post
+
+In [2]: Post.objects.filter(titulo__search='django')
+Out[2]: <QuerySet [<Post: ipython en shell de django>]>
+
+In [3]: Post.objects.filter(titulo__search='ango')
+Out[3]: <QuerySet []>
+
+In [4]: Post.objects.filter(titulo__search='ango')
+Out[4]: <QuerySet []>
+
+ from django.contrib.postgres.search import SearchVector
+
+In [7]: Post.objects.annotate(
+   ...: ... search=SearchVector('titulo', 'cuerpo'),
+   ...: ... ).filter(search='ango')
+Out[7]: <QuerySet []>
+
+In [8]: Post.objects.annotate(
+   ...: ... search=SearchVector('titulo', 'cuerpo'),
+   ...: ... ).filter(search='instalar')
+Out[8]: <QuerySet [<Post: ipython en shell de django>]>
+
+
+```	
 

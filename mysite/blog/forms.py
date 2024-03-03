@@ -11,5 +11,8 @@ class ComentariosForm(forms.ModelForm):
     class Meta:
         model = Comentarios
         fields = ('nombre','email','cuerpo')
+        
+class SearchForm(forms.Form):
+    consulta = forms.CharField()
     
     

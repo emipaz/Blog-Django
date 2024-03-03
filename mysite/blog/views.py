@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.http import Http404 
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from .models import Post , Comentarios
-from .forms import EmailPostForm , ComentariosForm
+from .forms import EmailPostForm , ComentariosForm , SearchForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from django.db.models import Count
+from django.contrib.postgres.search import SearchVector
 
 # Create your views here.
 
@@ -123,3 +124,25 @@ def comentar_post(request, post_id):
                              "comentario": comentario,
                              "formulario": formulario}
                   )
+    
+def buscar_post(request):
+    
+    formulario = SearchForm()
+    consulta   = None
+    resultados = []
+    
+    if 'consulta' in request.GET:
+        formulario = SearchForm(request.GET)
+        
+        if formulario.is_valid():
+            consulta = formulario.cleaned_data['consulta']
+            
+            resultados = Post.publicados.annotate(
+                             busqueda = SearchVector('titulo', 'cuerpo'),
+                    ).filter(busqueda = consulta)
+            
+    return render(request, 
+                  template_name ="blog/post/buscar.html",
+                  context = { 'form': formulario,
+                              'query': consulta,
+                              'results': resultados}) 
