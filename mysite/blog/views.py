@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from django.db.models import Count
 from django.contrib.postgres.search import SearchVector , SearchQuery, SearchRank
-
+from django.contrib.postgres.search import TrigramSimilarity
 # Create your views here.
 
 def lista_post(request, tag_slug=None):
@@ -136,13 +136,16 @@ def buscar_post(request):
         
         if formulario.is_valid():
             consulta = formulario.cleaned_data['consulta']
-            busca_vector   = SearchVector('titulo', 'cuerpo',  config = 'spanish')
-            busca_consulta = SearchQuery(consulta,             config = 'spanish') 
+            
+            
+            busca_vector   = SearchVector('titulo',weight='A' , config = 'spanish') + \
+                             SearchVector("cuerpo",weight='B' , config = 'spanish')
+            busca_consulta = SearchQuery(consulta,              config = 'spanish') 
             
             resultados = Post.publicados.annotate(
                              busqueda = busca_vector,
                              rank     = SearchRank(busca_vector, busca_consulta)
-                    ).filter(busqueda = consulta
+                    ).filter(rank__gte=0.3
                     ).order_by("-rank")
             
     return render(request, 
